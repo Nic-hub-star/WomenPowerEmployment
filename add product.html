@@ -13,7 +13,7 @@
         }
 
         body {
-            background-color:rgb(247, 247, 247);
+            background-color: rgb(247, 247, 247);
             padding: 20px;
         }
 
@@ -122,29 +122,26 @@
             margin-top: 10px;
         }
 
-        .submit-btn {
-            background-color: #1e88e5;
+        /* Center the Save Data button at the bottom */
+        .save-data-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4caf50;
             color: white;
             border: none;
             padding: 15px 30px;
-            border-radius: 5px;
-            font-size: 18px;
+            border-radius: 50px;
+            font-size: 16px;
             cursor: pointer;
-            display: block;
-            margin: 30px auto 0;
-            width: 100%;
-            max-width: 300px;
-            transition: background-color 0.3s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.2s;
         }
 
-        .submit-btn:hover {
-            background-color: #1565c0;
-        }
-
-        .camera-icon {
-            width: 24px;
-            height: 24px;
-            fill: white;
+        .save-data-btn:hover {
+            background-color: #388e3c;
+            transform: scale(1.05);
         }
     </style>
 </head>
@@ -172,7 +169,7 @@
                     <option value="home">Home & Garden</option>
                     <option value="sports">Natural product</option>
                     <option value="toys">Home decoration</option>
-                    <option value="automotive">Food </option>
+                    <option value="automotive">Food</option>
                     <option value="books">Masale</option>
                     <option value="other">Other</option>
                 </select>
@@ -190,10 +187,6 @@
                         <img id="preview-image" src="/api/placeholder/150/150" alt="Product preview">
                     </div>
                     <button type="button" class="upload-btn" id="upload-btn">
-                        <svg class="camera-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 15.2a3.2 3.2 0 100-6.4 3.2 3.2 0 000 6.4z"/>
-                            <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
-                        </svg>
                         Upload Photo
                     </button>
                     <input type="file" id="photo-input" accept="image/*" style="display: none">
@@ -210,10 +203,11 @@
                 </div>
                 <button type="button" class="add-spec-btn" id="add-spec-btn">+ Add Another Specification</button>
             </div>
-            
-            <a href="withdraw payment.html"><button type="submit" class="submit-btn">List Product for Sale</button></a>
         </form>
     </div>
+
+    <!-- Save Data button -->
+    <button class="save-data-btn" id="save-data-btn">Save Data</button>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -249,30 +243,9 @@
                 specsContainer.appendChild(specRow);
             });
 
-            const productForm = document.getElementById('product-form');
+            const saveDataBtn = document.getElementById('save-data-btn');
 
-            productForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const specs = [];
-                const specRows = document.querySelectorAll('.spec-row');
-                specRows.forEach(row => {
-                    const name = row.querySelector('.spec-name').value.trim();
-                    const value = row.querySelector('.spec-value').value.trim();
-                    if (name && value) {
-                        specs.push({ name, value });
-                    }
-                });
-
-                const product = {
-                    name: document.getElementById('product-name').value,
-                    description: document.getElementById('product-description').value,
-                    category: document.getElementById('product-category').value,
-                    price: parseFloat(document.getElementById('product-price').value),
-                    specs: specs,
-                };
-
-                console.log('Product data:', product);
+            saveDataBtn.addEventListener('click', function() {
                 alert('Product submitted successfully!');
             });
         });
