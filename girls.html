@@ -611,6 +611,107 @@
             color: #666;
             font-size: 1rem;
         }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary);
+        }
+
+        .modal ul {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .modal ul li {
+            margin: 0.5rem 0;
+            font-size: 1rem;
+            color: var(--dark);
+        }
+
+        .modal ul li a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .modal ul li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Style for the language translator button */
+        .language-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #8e44ad;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .language-btn:hover {
+            background-color: #7d3c98;
+            transform: scale(1.05);
+        }
+
+        .language-options {
+            position: fixed;
+            bottom: 60px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .language-option {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .language-option:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
@@ -876,6 +977,23 @@
         </div>
     </div>
 
+    <!-- Add modals for each feature -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <h2 id="modal-title"></h2>
+            <ul id="modal-skills"></ul>
+            <h3>Roadmap</h3>
+            <ul id="modal-roadmap"></ul>
+        </div>
+    </div>
+
+    <!-- Language Translator Buttons -->
+    <div class="language-options">
+        <button class="language-option" id="english-btn">English</button>
+        <button class="language-option" id="marathi-btn">मराठी</button>
+    </div>
+
     <footer>
         <div class="container">
             <div class="footer-container">
@@ -918,6 +1036,7 @@
             </div>
             <div class="copyright">
                 <p>&copy; 2025 Rural Girls' Digital Empowerment Platform. All rights reserved.</p>
+                <h2>HackStreetBoys</h2>
             </div>
         </div>
     </footer>
@@ -939,7 +1058,124 @@
             
             loginBtn.addEventListener('click', function() {
                 // In a real application,
-            })
+            });
+
+            const featureCards = document.querySelectorAll('.feature-card');
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalSkills = document.getElementById('modal-skills');
+            const modalRoadmap = document.getElementById('modal-roadmap');
+            const closeModal = document.getElementById('closeModal');
+
+            const featureData = {
+                "Localized E-Learning": {
+                    skills: ["Basic Computer Skills", "Language Proficiency", "E-Learning Tools"],
+                    roadmap: [
+                        { text: "Introduction to Computers", link: "https://www.youtube.com/watch?v=1snxuXqz0e8" },
+                        { text: "Using E-Learning Platforms", link: "https://www.youtube.com/watch?v=2g2D64YX5z8" }
+                    ]
+                },
+                "Skill Development": {
+                    skills: ["Digital Skills", "Financial Literacy", "Entrepreneurship Basics"],
+                    roadmap: [
+                        { text: "Learn Digital Skills", link: "https://www.youtube.com/watch?v=3g3D64YX5z9" },
+                        { text: "Financial Literacy Basics", link: "https://www.youtube.com/watch?v=4g4D64YX5z0" }
+                    ]
+                },
+                "Mentorship Network": {
+                    skills: ["Networking", "Career Guidance", "Personal Development"],
+                    roadmap: [
+                        { text: "How to Network Effectively", link: "https://www.youtube.com/watch?v=5g5D64YX5z1" },
+                        { text: "Career Guidance Tips", link: "https://www.youtube.com/watch?v=6g6D64YX5z2" }
+                    ]
+                },
+                "Micro-Entrepreneurship": {
+                    skills: ["Business Planning", "Marketing Basics", "Customer Management"],
+                    roadmap: [
+                        { text: "Starting a Small Business", link: "https://www.youtube.com/watch?v=7g7D64YX5z3" },
+                        { text: "Marketing for Beginners", link: "https://www.youtube.com/watch?v=8g8D64YX5z4" }
+                    ]
+                }
+            };
+
+            featureCards.forEach(card => {
+                card.addEventListener('click', function () {
+                    const title = this.querySelector('h3').innerText;
+                    const data = featureData[title];
+
+                    if (data) {
+                        modalTitle.innerText = title;
+                        modalSkills.innerHTML = data.skills.map(skill => `<li>${skill}</li>`).join('');
+                        modalRoadmap.innerHTML = data.roadmap.map(item => `<li><a href="${item.link}" target="_blank">${item.text}</a></li>`).join('');
+                        modal.style.display = 'flex';
+                    }
+                });
+            });
+
+            closeModal.addEventListener('click', function () {
+                modal.style.display = 'none';
+            });
+
+            window.addEventListener('click', function (e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            const englishBtn = document.getElementById('english-btn');
+            const marathiBtn = document.getElementById('marathi-btn');
+
+            // Function to translate content to English
+            function translateToEnglish() {
+                const translations = {
+                    "मराठी": "English",
+                    "महिला सक्षमीकरण": "Women Empowerment",
+                    "संपर्क करा": "Contact Us",
+                    "कौशल्य सुधारणा": "Skill Improvement",
+                    "ग्रामीण समुदाय": "Rural Communities",
+                    "मार्गदर्शन नेटवर्क": "Mentorship Network",
+                    "मायक्रो-उद्योजकता": "Micro-Entrepreneurship",
+                    "आमच्या समुदायात सामील व्हा": "Join Our Community",
+                    "यशोगाथा": "Success Stories"
+                };
+
+                document.querySelectorAll('[data-translate]').forEach(element => {
+                    const key = element.getAttribute('data-translate');
+                    if (translations[key]) {
+                        element.textContent = translations[key];
+                    }
+                });
+
+                alert('Language changed to English!');
+            }
+
+            // Function to translate content to Marathi
+            function translateToMarathi() {
+                const translations = {
+                    "English": "मराठी",
+                    "Women Empowerment": "महिला सक्षमीकरण",
+                    "Contact Us": "संपर्क करा",
+                    "Skill Improvement": "कौशल्य सुधारणा",
+                    "Rural Communities": "ग्रामीण समुदाय",
+                    "Mentorship Network": "मार्गदर्शन नेटवर्क",
+                    "Micro-Entrepreneurship": "मायक्रो-उद्योजकता",
+                    "Join Our Community": "आमच्या समुदायात सामील व्हा",
+                    "Success Stories": "यशोगाथा"
+                };
+
+                document.querySelectorAll('[data-translate]').forEach(element => {
+                    const key = element.getAttribute('data-translate');
+                    if (translations[key]) {
+                        element.textContent = translations[key];
+                    }
+                });
+
+                alert('Language changed to Marathi!');
+            }
+
+            // Event listeners for language buttons
+            englishBtn.addEventListener('click', translateToEnglish);
+            marathiBtn.addEventListener('click', translateToMarathi);
         });
     </script>
 </body>
